@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.kfqggk.SEC_LOGMapper">
+
+    <insert id="insertSEC_LOG" parameterType="com.xazktx.flowable.model.SEC_LOG">
+        insert into SEC_LOG values (#{LOGID},#{USERNAME},#{HOSTADDR},
+                                    #{APPNAME},#{MDLNAME},#{DOWHAT},
+                                    #{LOGINTIME},#{REMARK},
+                                    #{OPERTYPE},#{WARNTYPE})
+    </insert>
+
+    <select id="ywmc" resultType="com.xazktx.flowable.model.HomePage">
+        select *
+        from (select
+                     YWMC,
+                     WRKID
+              from (select distinct
+                           a.prjname as YWMC,
+                           c.WRKID as WRKID
+                    from wfm_procinst a
+                             left join wfm_actinst c
+                                       on a.prjid = c.prjid
+                    where  c.stepstate != '已废弃'
+                    <foreach collection="list" index="index" item="prjid" open="and (a.prjid in (" separator="," close="))">
+                        <if test="(index % 999) == 998"> NULL) OR a.prjid IN(</if>#{prjid}
+                    </foreach>
+                    order by c.submitby desc))
+    </select>
+
+</mapper>

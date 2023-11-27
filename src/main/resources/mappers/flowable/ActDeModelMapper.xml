@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.flowable.ActDeModelMapper">
+
+  <select id="selectJosnByModelKey" parameterType="String" resultType="java.lang.String">
+    select MODEL_EDITOR_JSON
+    from ACT_DE_MODEL
+    where MODEL_KEY = #{key,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

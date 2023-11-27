@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.kfqggk.FormMapper">
+
+    <select id="getFormJsonById" resultType="java.lang.String">
+        select FILEPATH
+        from FORMJSON
+        where ID = #{ID}
+    </select>
+
+    <select id="getFormJsonByName" resultType="java.lang.String">
+        select FILEPATH
+        from FORMJSON
+        where FILENAME = #{name}
+    </select>
+
+    <select id="getFormJsonIDByPath" resultType="java.lang.String">
+        select ID
+        from FORMJSON
+        where FILEPATH = #{filepath}
+    </select>
+
+    <insert id="insertFormJson">
+        insert into FORMJSON (ID , FILENAME, FILEPATH) values (#{id},#{name},#{path})
+    </insert>
+
+
+</mapper>

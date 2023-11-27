@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.kfqsxk.DJ_SJDMapper">
+
+    <select id="selectDJ_SJDBySLBH" resultType="com.xazktx.flowable.model.DJ_SJD">
+        select *
+        from (select SLBH,
+        CNSJ,
+        ZL,
+        SJR,
+        LCMC,
+        SJSJ,
+        (select ITEMNAME as MC
+        from DIC_ITEM
+        where DICCODE = '151029094521W77FP7WM8I'
+        and ITEMVAL = DJDL) as DJDL,
+        DJXL,
+        LCLX from DJ_SJD where
+        <bind name="SLBH" value="'%'+SLBH+'%'"/>
+        SLBH like #{SLBH}
+        order by SLBH)
+        where rownum = 1
+    </select>
+
+    <select id="djdl" resultType="String">
+        select DJDL
+        from DJ_SJD
+        where  <bind name="SLBH" value="'%'+SLBH+'%'"/>
+        SLBH like #{SLBH} and rownum = 1
+    </select>
+
+    <select id="lcmc" resultType="String">
+        select lcmc
+        from DJ_SJD
+        where  <bind name="SLBH" value="'%'+SLBH+'%'"/>
+        SLBH like #{SLBH} and rownum = 1
+    </select>
+
+    <select id="djdlzzd" resultType="String">
+        select (select ITEMNAME as MC
+        from DIC_ITEM
+        where DICCODE = '151029094521W77FP7WM8I'
+        and ITEMVAL = DJDL) as DJDL
+        from DJ_SJD
+        where <bind name="SLBH" value="'%'+SLBH+'%'"/>
+        SLBH like #{SLBH} and rownum = 1
+    </select>
+
+    <select id="djdldy" resultType="integer">
+        select count(*)
+        from DJ_SJD
+        where <bind name="SLBH" value="'%'+SLBH+'%'"/>
+        SLBH like #{SLBH} and djxl like '%抵押%'
+    </select>
+
+</mapper>

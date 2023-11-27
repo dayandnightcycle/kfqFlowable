@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.flowable.NewHomePageMapper">
+
+    <select id="newhomepage" resultType="com.xazktx.flowable.model.HomePage">
+        <if test="pageNumber !='' and pageNumber != null and pageSize !='' and pageSize != null">
+            select *
+            from (select rownum r, t.*
+            from (
+        </if>
+        select ROWNUM AS RN,
+        YJ,
+        SLBH,
+        YWMC,
+        YWZL,
+        BLBZ,
+        SJR AS JSR,
+        TJR,
+        BLZT,
+        PROCNAME,
+        JSSJ,
+        YWXDJZSJ
+        from FLO.WFM_ACTINST
+        where 1=1
+        <if test="YWMC != null and YWMC != ''">
+            <bind name="YWMC" value="'%'+YWMC+'%'"/>
+            and YWMC like #{YWMC}
+        </if>
+        <if test="YWZL != null and YWZL != ''">
+            <bind name="YWZL" value="'%'+YWZL+'%'"/>
+            and YWZL like #{YWZL}
+        </if>
+        <foreach collection="list" index="index" item="slbh" open="and (SLBH in (" separator="," close="))">
+            <if test="(index % 999) == 998">NULL) OR SLBH IN(</if>#{slbh}
+        </foreach>
+        <if test="pageNumber !='' and pageNumber != null and pageSize !='' and pageSize != null">
+            ) t
+            where rownum &lt;= #{pageNumber} * #{pageSize} )
+            where r &gt;= ((#{pageNumber} - 1) * #{pageSize} + 1)
+        </if>
+    </select>
+
+    <select id="newcount" resultType="Long">
+        select count(*) from (
+        select ROWNUM AS RN,
+        YJ,
+        SLBH,
+        YWMC,
+        YWZL,
+        BLBZ,
+        SJR AS JSR,
+        TJR,
+        BLZT,
+        PROCNAME,
+        JSSJ,
+        YWXDJZSJ
+        from FLO.WFM_ACTINST
+        where 1=1
+        <if test="YWMC != null and YWMC != ''">
+            <bind name="YWMC" value="'%'+YWMC+'%'"/>
+            and YWMC like #{YWMC}
+        </if>
+        <if test="YWZL != null and YWZL != ''">
+            <bind name="YWZL" value="'%'+YWZL+'%'"/>
+            and YWZL like #{YWZL}
+        </if>
+        <if test="list != null and list != ''">
+            <foreach collection="list" index="index" item="slbh" open="and (SLBH in (" separator="," close="))">
+                <if test="(index % 999) == 998">NULL) OR SLBH IN(</if>#{slbh}
+            </foreach>
+        </if>
+        )
+    </select>
+
+</mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.kfqggk.HomePageMapper">
+
+    <select id="homepage" resultType="com.xazktx.flowable.model.HomePage">
+        <if test="pageNumber !='' and pageNumber != null and pageSize !='' and pageSize != null">
+            select *
+            from (select rownum r, t.*
+            from (
+        </if>
+        select *
+        from (select ROWNUM AS RN,
+                     YJ,
+                     SLBH,
+                     YWMC,
+                     YWZL,
+                     BLBZ,
+                     JSR,
+                     TJR,
+                     BLZT,
+                     JSSJ,
+                     YWXDJZSJ,
+                     PROCNAME
+              from (select distinct a.yjzt as YJ,
+                           a.prjid as SLBH,
+                           a.prjname as YWMC,
+                           a.initaddr as YWZL,
+                           c.stepname as BLBZ,
+                           (select e.name
+                            from SEC_EMPLOYEE e
+                            where e.usercode = a.acceptby) as JSR,
+                           (select e.name
+                            from SEC_EMPLOYEE e
+                            where e.usercode = c.submitby) as TJR,
+                           c.stepstate as BLZT,
+                           a.accepttime as JSSJ,
+                           a.limittime as YWXDJZSJ,
+                           a.procname as PROCNAME
+                    from wfm_procinst a
+                             left join wfm_actinst c
+                                       on a.prjid = c.prjid
+                    where c.stepstate != '已完成'
+                   and c.stepstate != '已废弃'
+                    <if test="YWMC != null and YWMC != ''">
+                    <bind name="YWMC" value="'%'+YWMC+'%'"/>
+                        and a.prjname like #{YWMC}
+                    </if>
+                    <if test="YWZL != null and YWZL != ''">
+                    <bind name="YWZL" value="'%'+YWZL+'%'"/>
+                        and a.initaddr like #{YWZL}
+                    </if>
+                    <foreach collection="list" index="index" item="prjid" open="and (a.prjid in (" separator="," close="))">
+                        <if test="(index % 999) == 998"> NULL) OR a.prjid IN(</if>#{prjid}
+                    </foreach>
+                    order by a.accepttime desc))
+        <if test="pageNumber !='' and pageNumber != null and pageSize !='' and pageSize != null">
+            ) t
+            where rownum &lt;=   #{pageNumber} * #{pageSize}  )
+            where r &gt;=  ((#{pageNumber} - 1) * #{pageSize} + 1)
+        </if>
+
+    </select>
+
+    <select id="count" resultType="Long">
+        select count(*) from (
+            select *
+        from (select ROWNUM AS RN,
+                     YJ,
+                     SLBH,
+                     YWMC,
+                     YWZL,
+                     BLBZ,
+                     JSR,
+                     TJR,
+                     BLZT,
+                     JSSJ,
+                     YWXDJZSJ,
+                     PROCNAME
+              from (select distinct a.yjzt as YJ,
+                           a.prjid as SLBH,
+                           a.prjname as YWMC,
+                           a.initaddr as YWZL,
+                           c.stepname as BLBZ,
+                           (select e.name
+                            from SEC_EMPLOYEE e
+                            where e.usercode = a.acceptby) as JSR,
+                           (select e.name
+                            from SEC_EMPLOYEE e
+                            where e.usercode = c.submitby) as TJR,
+                           c.stepstate as BLZT,
+                           a.accepttime as JSSJ,
+                           a.limittime as YWXDJZSJ,
+                           a.procname as PROCNAME
+                    from wfm_procinst a
+                             left join wfm_actinst c
+                                       on a.prjid = c.prjid
+                    where c.stepstate != '已完成'
+                   and c.stepstate != '已废弃'
+                    <if test="YWMC != null and YWMC != ''">
+                    <bind name="YWMC" value="'%'+YWMC+'%'"/>
+                        and a.prjname like #{YWMC}
+                    </if>
+                    <if test="YWZL != null and YWZL != ''">
+                    <bind name="YWZL" value="'%'+YWZL+'%'"/>
+                        and a.initaddr like #{YWZL}
+                    </if>
+                    <foreach collection="list" index="index" item="prjid" open="and (a.prjid in (" separator="," close="))">
+                        <if test="(index % 999) == 998"> NULL) OR a.prjid IN(</if>#{prjid}
+                    </foreach>
+                    order by a.accepttime desc))
+                                 )
+    </select>
+
+</mapper>

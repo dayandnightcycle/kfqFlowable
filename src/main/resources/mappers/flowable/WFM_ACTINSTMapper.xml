@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.flowable.WFM_ACTINSTMapper">
+
+    <insert id="insertWFM_ACTINST" parameterType="com.xazktx.flowable.model.WFM_ACTINST">
+        insert into WFM_ACTINST
+        values (#{ID, jdbcType = VARCHAR}, #{YJ, jdbcType = VARCHAR}, #{SLBH, jdbcType = VARCHAR},
+                #{YWMC, jdbcType = VARCHAR}, #{BLBZ, jdbcType = VARCHAR}, #{SJR, jdbcType = VARCHAR},
+                #{TJR, jdbcType = VARCHAR}, #{JSSJ, jdbcType = DATE}, #{BLZT, jdbcType = VARCHAR},
+                #{YWXDJZSJ, jdbcType = DATE}, #{PROCNAME, jdbcType = VARCHAR}, #{YWZL, jdbcType = VARCHAR})
+    </insert>
+
+    <select id="countWFM_ACTINST" parameterType="String" resultType="integer">
+        select count(1) as COUNT
+        from WFM_ACTINST
+        where SLBH = #{SLBH}
+    </select>
+
+    <update id="updateWFM_ACTINST" parameterType="com.xazktx.flowable.model.WFM_ACTINST">
+        update WFM_ACTINST
+        set YJ       = #{YJ, jdbcType = VARCHAR},
+            YWMC     = #{YWMC, jdbcType = VARCHAR},
+            BLBZ     = #{BLBZ, jdbcType = VARCHAR},
+            SJR      = #{SJR, jdbcType = VARCHAR},
+            TJR      = #{TJR, jdbcType = VARCHAR},
+            JSSJ     = #{JSSJ, jdbcType = DATE},
+            BLZT     = #{BLZT, jdbcType = VARCHAR},
+            YWXDJZSJ = #{YWXDJZSJ, jdbcType = DATE},
+            PROCNAME = #{PROCNAME, jdbcType = VARCHAR},
+            YWZL     = #{YWZL, jdbcType = VARCHAR}
+        where SLBH = #{SLBH}
+    </update>
+
+    <delete id="deleteWFM_ACTINST">
+        delete from WFM_ACTINST where SLBH = #{SLBH}
+    </delete>
+
+    <select id="selectYWMCByWFM_ACTINST" resultType="String">
+        select YWMC from WFM_ACTINST where SLBH = #{SLBH}
+    </select>
+
+</mapper>

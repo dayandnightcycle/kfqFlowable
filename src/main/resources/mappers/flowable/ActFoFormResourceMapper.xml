@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.flowable.ActFoFormResourceMapper">
+
+    <resultMap id="blob" type="com.xazktx.flowable.model.ActFoFormResource">
+        <result column="RESOURCE_BYTES_" property="RESOURCE_BYTES_"
+                typeHandler="com.xazktx.flowable.config.ConvertBlobTypeHandler"></result>
+    </resultMap>
+
+    <select id="selectJosnByName" parameterType="String" resultMap="blob">
+        select RESOURCE_BYTES_
+        from ACT_FO_FORM_RESOURCE
+        where NAME_ = #{name,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectJosn" resultMap="blob">
+        select RESOURCE_BYTES_
+        from ACT_FO_FORM_RESOURCE
+    </select>
+
+    <select id="selectJosnName" resultType="com.xazktx.flowable.model.ActFoFormResource">
+        select NAME_
+        from ACT_FO_FORM_RESOURCE
+    </select>
+
+    <delete id="deleteFormByName" parameterType="String">
+        delete
+        from ACT_FO_FORM_RESOURCE
+        where NAME_ = #{formName,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

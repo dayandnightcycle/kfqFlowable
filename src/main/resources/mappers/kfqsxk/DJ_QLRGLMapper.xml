@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.kfqsxk.DJ_QLRGLMapper">
+
+    <select id="selectDJ_QLRGLBySLBH" resultType="String">
+        select QLRMC from (select distinct QLRID, QLRMC
+        from DJ_QLRGL
+        where QLRLX = '权利人' and
+        <bind name="SLBH" value="'%'+SLBH+'%'"/>
+        SLBH like #{SLBH})
+    </select>
+
+</mapper>

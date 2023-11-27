@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xazktx.flowable.mapper.kfqggk.OldHomePageMapper">
+
+    <select id="oldhomepagepro" resultType="com.xazktx.flowable.model.HomePage">
+        <if test="pageNumber !='' and pageNumber != null and pageSize !='' and pageSize != null">
+            select *
+            from (select rownum r, t.*
+            from (
+        </if>
+        select *
+        from (select ROWNUM AS RN,
+        YJ,
+        SLBH,
+        YWMC,
+        YWZL,
+        JSR,
+        JSSJ,
+        YWXDJZSJ,
+        PROCNAME
+        from (select distinct a.yjzt as YJ,
+        a.prjid as SLBH,
+        a.prjname as YWMC,
+        a.initaddr as YWZL,
+        (select e.name
+        from SEC_EMPLOYEE e
+        where e.usercode = a.acceptby) as JSR,
+        a.accepttime as JSSJ,
+        a.limittime as YWXDJZSJ,
+        a.procname as PROCNAME
+        from wfm_procinst a where 1=1 and procname not like '%查询%'
+        <if test="YWMC != null and YWMC != ''">
+            <bind name="YWMC" value="'%'+YWMC+'%'"/>
+            and a.prjname like #{YWMC}
+        </if>
+        <if test="YWZL != null and YWZL != ''">
+            <bind name="YWZL" value="'%'+YWZL+'%'"/>
+            and a.initaddr like #{YWZL}
+        </if>
+        <if test="SLBH != null and SLBH != ''">
+            <bind name="SLBH" value="'%'+SLBH+'%'"/>
+            and a.prjid like #{SLBH}
+        </if>
+        order by a.accepttime desc))
+        <if test="pageNumber !='' and pageNumber != null and pageSize !='' and pageSize != null">
+            ) t
+            where rownum &lt;= #{pageNumber} * #{pageSize} )
+            where r &gt;= ((#{pageNumber} - 1) * #{pageSize} + 1)
+        </if>
+
+    </select>
+
+    <select id="oldhomepageact" resultType="com.xazktx.flowable.model.HomePage">
+        select BLBZ,
+        TJR,
+        BLZT
+        from (select distinct
+        c.stepname as BLBZ,
+        (select e.name
+        from SEC_EMPLOYEE e
+        where e.usercode = c.submitby) as TJR,
+        c.stepstate as BLZT,
+        c.submittime
+        from wfm_actinst c
+        where
+        <if test="SLBH != null and SLBH != ''">
+            c.prjid = #{SLBH}
+        </if>
+        order by submittime desc) where rownum =1
+    </select>
+
+    <select id="oldcount" resultType="Long">
+        select count(*) from (
+        select *
+        from (select ROWNUM AS RN,
+        YJ,
+        SLBH,
+        YWMC,
+        YWZL,
+        JSR,
+        JSSJ,
+        YWXDJZSJ,
+        PROCNAME
+        from (select distinct a.yjzt as YJ,
+        a.prjid as SLBH,
+        a.prjname as YWMC,
+        a.initaddr as YWZL,
+        (select e.name
+        from SEC_EMPLOYEE e
+        where e.usercode = a.acceptby) as JSR,
+        a.accepttime as JSSJ,
+        a.limittime as YWXDJZSJ,
+        a.procname as PROCNAME
+        from wfm_procinst a where 1=1 and procname not like '%查询%'
+        <if test="YWMC != null and YWMC != ''">
+            <bind name="YWMC" value="'%'+YWMC+'%'"/>
+            and a.prjname like #{YWMC}
+        </if>
+        <if test="YWZL != null and YWZL != ''">
+            <bind name="YWZL" value="'%'+YWZL+'%'"/>
+            and a.initaddr like #{YWZL}
+        </if>
+        <if test="SLBH != null and SLBH != ''">
+            <bind name="SLBH" value="'%'+SLBH+'%'"/>
+            and a.prjid like #{SLBH}
+        </if>
+        order by a.accepttime desc))
+        )
+    </select>
+
+    <select id="lcmc" resultType="com.xazktx.flowable.model.Lcmc">
+        select STEPNAME as mc,
+               (select e.name from SEC_EMPLOYEE e where e.usercode = t.submitby) as userName
+        from WFM_ACTINST t
+        where prjid = #{SLBH}  order by t.wrkid asc
+    </select>
+
+    <select id="lcmc1" resultType="string">
+        select  PRJNAME
+        from wfm_procinst t
+        where prjid = #{SLBH}
+    </select>
+
+</mapper>
